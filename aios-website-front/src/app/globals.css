@@ -1,0 +1,75 @@
+@import '../styles/hide-dev-tools.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #020207;
+  --foreground: #FFFFFF;
+  --accent-color: #4ECDC4;
+  --text-light: #E0E0E0;
+  --gradient-dark: #0D0E12;
+  --gradient-light: #607880;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-[#020207] text-white;
+  }
+}
+
+@layer components {
+  .container-fluid {
+    @apply w-full max-w-[1440px] mx-auto px-4 md:px-6 lg:px-8;
+  }
+  
+  .btn-primary {
+    @apply bg-secondary text-white px-6 py-3 rounded-md font-medium hover:opacity-90 transition-opacity;
+  }
+  
+  .btn-secondary {
+    @apply bg-transparent border border-accent text-white px-6 py-3 rounded-md font-medium hover:bg-accent/10 transition-all;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-gradient-dark to-primary-gradient-light bg-clip-text text-transparent;
+  }
+}
+
+/* Hide Next.js dev UI elements */
+button[aria-label*="Next.js"],
+div[role="button"][aria-label*="Next.js"],
+div[style*="position: fixed"][style*="bottom: 0"][style*="left: 0"],
+div[style*="position: fixed"][style*="bottom: 0"][style*="right: 0"],
+[data-nextjs-toast],
+#nextjs-toast,
+#__next-build-watcher,
+[aria-label="Open dev overlay"],
+[aria-label="Open Next.js overlay"],
+[data-nextjs-dev-overlay],
+#__next-route-announcer,
+div[data-radix-focus-guard],
+#react-dev-overlay,
+div[role="alert"][class*="nextjs"],
+#__nextjs-router-announcement,
+button[aria-label*="Next.js"],
+div[style*="padding:1em;border:2px solid red;border-radius:4px"],
+[class*="__next-dev-only"],
+[id^="__next-"],
+#nextjs-portal,
+[data-next-dev],
+div#__next-dev-tooltip {
+  display: none !important;
+  visibility: hidden !important;
+}

@@ -1,0 +1,16 @@
+node_modules
+/dist
+out
+.DS_Store
+.eslintcache
+*.log*
+.env
+
+# Allow dist folders in mcp-extensions
+!mcp-extensions/**/dist
+
+resources/credentials/
+
+external_runtimes/
+
+mcp-extensions/

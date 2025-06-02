@@ -1,0 +1,62 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Backend Plan: Online Extension Management
+
+This plan outlines the steps to modify the backend (main process) to support discovering, downloading, installing, and uninstalling MCP extensions from an online registry, integrating the logic into the existing `ExtensionManager`.
+
+**Naming Convention:** Use `mcp-extensions` for directories and related concepts.
+
+**Phase 1: Setup and Online Registry Fetching**
+
+1.  **Configure Paths & Registry URL:**
+    *   Add `mcpExtensionRegistryUrl` to [`src/main/config.ts`](mdc:src/main/config.ts) (using the raw GitHub `registry.json` URL).
+    *   In [`src/main/extension-manager.ts`](mdc:src/main/extension-manager.ts):
+        *   Update `EXTENSIONS_ROOT_PATH` to use `app.getPath('userData')` + `/mcp-extensions`.
+        *   Update `METADATA_FILE_PATH` to be within the new `EXTENSIONS_ROOT_PATH`.
+    *   Review `extraResources` in [`package.json`](mdc:package.json) (keep for now).
+
+2.  **Implement Online Registry Fetching:**
+    *   In [`src/main/extension-manager.ts`](mdc:src/main/extension-manager.ts):
+        *   Define `ExtensionRegistryEntry` interface.
+        *   Add state: `private availableOnlineExtensions: Map<string, ExtensionRegistryEntry>`.
+        *   Implement `async fetchOnlineRegistry(registryUrl: string): Promise<void>` using `axios`.
+    *   In [`src/main/ipcHandlers.ts`](mdc:src/main/ipcHandlers.ts):
+        *   Add handler `extensions:fetch-registry` to call `fetchOnlineRegistry`.
+    *   In [`src/main/index.ts`](mdc:src/main/index.ts):
+        *   Call `fetchOnlineRegistry` after `ExtensionManager` instantiation.
+
+**Phase 2: Refactor Discovery & Adapt Install/Uninstall Signatures**
+
+3.  **Refactor Local Discovery:**
+    *   In [`src/main/extension-manager.ts`](mdc:src/main/extension-manager.ts):
+        *   Rename `_scanDirectory` to `_scanLocalDirectory` (operates on `userData`).
+        *   Update `discoverAndLoadExtensions` to use `_scanLocalDirectory`.
+        *   Modify `getDiscoverableExtensionsInfo` to return *online* extensions not locally managed (return type `ExtensionRegistryEntry[]`).
+    *   In [`src/main/ipcHandlers.ts`](mdc:src/main/ipcHandlers.ts):
+        *   Update `get-discoverable-extensions` handler.
+
+4.  **Implement Download/Extract/Delete Helpers:**
+    *   In [`src/main/extension-manager.ts`](mdc:src/main/extension-manager.ts):
+        *   Implement private helper `_getDownloadUrlForPlatform`.
+        *   Implement private helper `_downloadAndExtractExtension` (using `axios`, `extract-zip`, `fs/promises`).
+        *   Implement private helper `_deleteExtensionFiles` (using `fs.rm`).
+
+**Phase 3: Core Install/Uninstall Logic**
+
+5.  **Modify Install/Uninstall Methods:**
+    *   In [`src/main/extension-manager.ts`](mdc:src/main/extension-manager.ts):
+        *   Update `installMCPExtension`: Call `_downloadAndExtractExtension`, read manifest post-extract, update `managedExtensionsStatus`, write metadata, call `_scanLocalDirectory` again.
+        *   Update `uninstallMCPExtension`: Disconnect, update `managedExtensionsStatus`, write metadata, call `_deleteExtensionFiles`, remove from `discoveredExtensions`.
+    *   In [`src/main/ipcHandlers.ts`](mdc:src/main/ipcHandlers.ts):
+        *   Review data returned by `install-extension` and `uninstall-extension` handlers (should return updated managed & online lists).
+
+**Phase 4: Verification & Frontend (Future)**
+
+6.  **Verify Protocol Handler:**
+    *   Review `ext-asset` handler in [`src/main/index.ts`](mdc:src/main/index.ts) to ensure it works with `userData` paths.
+
+7.  **Frontend Implementation:** (Separate task)
+    *   Update UI components and hooks (`ExtensionManager.tsx`, `useExtensionData`, `useExtensionActions`) to use new/modified IPC handlers.

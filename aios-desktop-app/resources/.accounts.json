@@ -1,0 +1,9 @@
+{
+    "accounts": [
+        {
+            "email": "mibrahim37612@gmail.com",
+            "account_type": "personal",
+            "extra_info": "Use the email as __user_id__"
+        }
+    ]
+}

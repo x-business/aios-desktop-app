@@ -1,0 +1,58 @@
+{
+  "info": {
+    "name": "AIOS Backend API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Google OAuth",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:3000/api/auth/google"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Points",
+      "item": [
+        {
+          "name": "Get Balance",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:3000/api/points/balance",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Google Sign In",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3001/api/auth/google"
+      }
+    },
+    {
+      "name": "Get Current User",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3001/api/auth/me",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ]
+      }
+    }
+  ]
+} 

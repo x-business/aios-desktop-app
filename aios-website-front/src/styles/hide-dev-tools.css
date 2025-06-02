@@ -1,0 +1,30 @@
+/* Hide Next.js dev tools, especially the one in the bottom-right corner */
+button[data-nextjs-router-announcer],
+button[data-nextjs-dev-turbo-indicator],
+[data-nextjs-dialog],
+button[aria-label="Next.js development tools"],
+div[data-nextjs-terminal-button],
+div[data-nextjs-terminal],
+div[data-nextjs-router-announcer],
+div[aria-label="Next.js development tools button"],
+[data-nextjs="route-announcer"],
+[data-nextjs="dev-turbo-indicator"],
+#__next-route-announcer,
+#__next-build-watcher,
+/* More specific selectors for the bottom right icon */
+button[data-testid="dev-tools-button"],
+button[role="button"][aria-label="Next.js development tools button"],
+div[style*="position: fixed; bottom: 0; right: 0"],
+div[data-listening-to-keys][style*="position: fixed; bottom: 0px; right: 0px"],
+div[data-nextjs-devtools-button] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  position: absolute !important;
+  z-index: -9999 !important;
+} 

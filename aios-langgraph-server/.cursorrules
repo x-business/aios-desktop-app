@@ -1,0 +1,10 @@
+you were right in the start but you were distracted due to unused files, let me just tell you test_websocket is not being used i have deleted it. The websocket_tool+node is not being used as of now  maybe i will use it in the future, the main flow is something like this 
+
+there are two types of servers the server in react_agent/web is the one that let's us add custom end points to already managed server by langgraph. i am adding a websocket endpoint just for one use case, the tools that i have to call should be present on the user machine so i am calling them through websocket and getting their result back from websocket as well.
+
+all the other things are happening through the endpoints langgraph server (managed by langgraph) provides us. Such as invoking the agent in @graph.py getting the streaming or whole response back. what happens is when a message needs to call a tool it goes through the websocket to the client side calls that tool and get the response back and the rest is handled by http endpoint langgraph server has.
+
+what happens normally?
+normally the tools that agent have to use are present on the server side but my implementation requires them to be on the client side. so i have developed this workaround that all the other things are same but when it comes to a tool call i use websocket to exectute the tool call and get back the result. the rest of flow is just like the normal langgraph flow with this little trick or hack you can say in it.
+
+for clearer picture of how both of these are working together i would ask you to check the client side code in @client.ts it will give you much better picture. you would not be refactoring the client side code for now but  this is just for your better understanding.
